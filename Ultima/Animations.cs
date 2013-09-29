@@ -54,6 +54,10 @@ namespace Ultima
                         string[] split = line.Split('\t');
 
                         int original = System.Convert.ToInt32(split[0]);
+                        if(original == 666)
+                        {
+                            System.Console.WriteLine("Teste");
+                        }
                         int anim2 = System.Convert.ToInt32(split[1]);
                         int anim3;
                         int anim4;

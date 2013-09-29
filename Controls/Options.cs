@@ -12,6 +12,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 
 namespace FiddlerControls
 {
@@ -253,7 +254,7 @@ namespace FiddlerControls
         static Options()
         {
             AppDataPath = Path.Combine(
-                System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "UoFiddler");
+                System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
         }
     }
 }

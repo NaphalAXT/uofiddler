@@ -364,6 +364,23 @@ namespace FiddlerControls
                 MessageBoxDefaultButton.Button1);
         }
 
+        private void extract_Image_ClickPng(object sender, EventArgs e)
+        {
+            string path = FiddlerControls.Options.OutputPath;
+            int i = int.Parse(listBox.Items[listBox.SelectedIndex].ToString());
+            string FileName = Path.Combine(path, String.Format("{0}.png", i));
+            Bitmap bit = new Bitmap(Gumps.GetGump(i));
+            if (bit != null)
+                bit.Save(FileName, ImageFormat.Png);
+            bit.Dispose();
+            MessageBox.Show(
+                String.Format("Gump saved to {0}", FileName),
+                "Saved",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1);
+        }
+
         private void extract_Image_ClickTiff(object sender, EventArgs e)
         {
             string path = FiddlerControls.Options.OutputPath;
@@ -415,6 +432,31 @@ namespace FiddlerControls
                             Bitmap bit = new Bitmap(Gumps.GetGump(index));
                             if (bit != null)
                                 bit.Save(FileName, ImageFormat.Bmp);
+                            bit.Dispose();
+                        }
+                    }
+                    MessageBox.Show(String.Format("All Gumps saved to {0}", dialog.SelectedPath), "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                }
+            }
+        }
+
+        private void OnClick_SaveAllPng(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = "Select directory";
+                dialog.ShowNewFolderButton = true;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    for (int i = 0; i < listBox.Items.Count; ++i)
+                    {
+                        int index = int.Parse(listBox.Items[i].ToString());
+                        if (index >= 0)
+                        {
+                            string FileName = Path.Combine(dialog.SelectedPath, String.Format("{0}.png", index));
+                            Bitmap bit = new Bitmap(Gumps.GetGump(index));
+                            if (bit != null)
+                                bit.Save(FileName, ImageFormat.Png);
                             bit.Dispose();
                         }
                     }
