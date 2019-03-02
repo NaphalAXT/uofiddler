@@ -68,9 +68,9 @@
   <Multi name="Tokuno Galleon Heavily Damaged [South]" id="58" type="0" />
   <Multi name="Tokuno Galleon Heavily Damaged [West]" id="59" type="0" />
   <Multi name="Rowboat [North]" id="60" type="0" />
-  <Multi name="Rowboat Galleon [East]" id="61" type="0" />
-  <Multi name="Rowboat Galleon [South]" id="62" type="0" />
-  <Multi name="Rowboat Galleon [West]" id="63" type="0" />
+  <Multi name="Rowboat [East]" id="61" type="0" />
+  <Multi name="Rowboat [South]" id="62" type="0" />
+  <Multi name="Rowboat [West]" id="63" type="0" />
   <Multi name="Britannian Ship [North]" id="64" type="0" />
   <Multi name="Britannian Galleon [East]" id="65" type="0" />
   <Multi name="Britannian Galleon [South]" id="66" type="0" />
@@ -278,6 +278,7 @@
   <Multi name="Bazaar Stall" id="6006" type="2" />
   <Multi name="Bazaar Stall" id="6007" type="2" />
   <Multi name="Bazaar Stall" id="6008" type="2" />
+  <Multi name="Bazaar Stall" id="6010" type="2" />
   <Multi name="Bazaar Stall" id="6011" type="2" />
   <Multi name="Bazaar Stall" id="6012" type="2" />
   

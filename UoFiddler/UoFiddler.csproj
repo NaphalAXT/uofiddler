@@ -238,8 +238,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Zlib32.dll" />
-    <Content Include="Zlib64.dll" />
+    <Content Include="Zlib32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Zlib64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="UOFiddler.jpg" />

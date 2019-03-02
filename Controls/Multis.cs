@@ -22,7 +22,9 @@ namespace FiddlerControls
 {
     public partial class Multis : UserControl
     {
-        private string MultiXMLFileName = Path.Combine(FiddlerControls.Options.AppDataPath, "Multilist.xml");
+        private string MultiXMLFileName1 = Path.Combine(FiddlerControls.Options.OutputPath, "Multilist.xml");
+        private string MultiXMLFileName2 = Path.Combine(FiddlerControls.Options.AppDataPath, "Multilist.xml");
+
         private XmlDocument xDom = null;
         private XmlElement xMultis = null;
 
@@ -32,10 +34,16 @@ namespace FiddlerControls
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
             refmarker = this;
 
-            if ((File.Exists(MultiXMLFileName)))
+            if (File.Exists(MultiXMLFileName1))
             {
                 xDom = new XmlDocument();
-                xDom.Load(MultiXMLFileName);
+                xDom.Load(MultiXMLFileName1);
+                xMultis = xDom["Multis"];
+            }
+            else if (File.Exists(MultiXMLFileName2))
+            {
+                xDom = new XmlDocument();
+                xDom.Load(MultiXMLFileName2);
                 xMultis = xDom["Multis"];
             }
         }
@@ -84,6 +92,7 @@ namespace FiddlerControls
                         {
                             j = xMultiNode.Attributes["name"].Value;
                         }
+
                         node = new TreeNode(String.Format("{0,5} (0x{0:X}) {1}", i, j));
                         xMultiNodeList = xMultis.SelectNodes("/Multis/ToolTip[@id='" + i + "']");
                         foreach (XmlNode xMultiNode in xMultiNodeList)

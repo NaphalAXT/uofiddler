@@ -79,8 +79,6 @@ namespace UoFiddler
             MoveFile(di.GetFiles(@"Options_default.xml", SearchOption.TopDirectoryOnly), FiddlerControls.Options.AppDataPath);
             MoveFile(di.GetFiles(@"Animationlist.xml", SearchOption.TopDirectoryOnly), FiddlerControls.Options.AppDataPath);
             MoveFile(di.GetFiles(@"Multilist.xml", SearchOption.TopDirectoryOnly), FiddlerControls.Options.AppDataPath);
-            MoveFile(di.GetFiles(@"Zlib32.dll", SearchOption.TopDirectoryOnly), FiddlerControls.Options.AppDataPath);
-            MoveFile(di.GetFiles(@"Zlib64.dll", SearchOption.TopDirectoryOnly), FiddlerControls.Options.AppDataPath);
             di = new DirectoryInfo(Path.Combine(Application.StartupPath,"plugins"));
             MoveFile(di.GetFiles("*.xml", SearchOption.TopDirectoryOnly), pluginpath);
 

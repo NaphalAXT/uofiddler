@@ -100,7 +100,16 @@ namespace Ultima
         public static ZLibError Decompress(byte[] dest, ref int destLength, byte[] source, int sourceLength)
         {
             if (Environment.Is64BitProcess)
-                return uncompress64(dest, ref destLength, source, sourceLength);
+            {
+                try
+                {
+                    return uncompress64(dest, ref destLength, source, sourceLength);
+                }
+                catch
+                {
+                    throw new ArgumentException("DLLNotFoundException: Move Zlib32.dll and Zlib64.dll to output directory (same folder as UoFiddler application) after you compile.");
+                }
+            }
 
             return uncompress(dest, ref destLength, source, sourceLength);
         }
@@ -124,7 +133,16 @@ namespace Ultima
         public static ZLibError Compress(byte[] dest, ref int destLength, byte[] source, int sourceLength)
         {
             if (Environment.Is64BitProcess)
-                return compress64(dest, ref destLength, source, sourceLength);
+            {
+                try
+                {
+                    return compress64(dest, ref destLength, source, sourceLength);
+                }
+                catch
+                {
+                    throw new ArgumentException("DLLNotFoundException: Move Zlib32.dll and Zlib64.dll to output directory (same folder as UoFiddler application) after you compile.");
+                }
+            }
 
             return compress(dest, ref destLength, source, sourceLength);
         }
@@ -147,7 +165,16 @@ namespace Ultima
         public static ZLibError Compress(byte[] dest, ref int destLength, byte[] source, int sourceLength, ZLibQuality quality)
         {
             if (Environment.Is64BitProcess)
-                return compress64(dest, ref destLength, source, sourceLength, quality);
+            {
+                try
+                {
+                    return compress64(dest, ref destLength, source, sourceLength, quality);
+                }
+                catch
+                {
+                    throw new ArgumentException("DLLNotFoundException: Move Zlib32.dll and Zlib64.dll to output directory (same folder as UoFiddler application) after you compile.");
+                }
+            }
 
             return compress(dest, ref destLength, source, sourceLength, quality);
         }
