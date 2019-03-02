@@ -189,6 +189,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RadarCol.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SkillGroups.cs" />
     <Compile Include="Skills.cs" />
     <Compile Include="Sound.cs" />
@@ -221,6 +222,11 @@
     <Compile Include="WindowProcessStream.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Zlib.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Zlib32.dll" />
+    <Content Include="Zlib64.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

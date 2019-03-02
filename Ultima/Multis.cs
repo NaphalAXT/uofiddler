@@ -9,8 +9,15 @@ namespace Ultima
 {
     public sealed class Multis
     {
-        private static MultiComponentList[] m_Components = new MultiComponentList[0x2000];
-        private static FileIndex m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", 0x2000, 14);
+        private static MultiComponentList[] m_Components = new MultiComponentList[UOPMultiLength];
+        //private static FileIndex m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", "MultiCollection.uop", 0x212A, 14, ".bin", 0x212A, false);
+        private static FileIndex m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", UOPMultiLength, 14);
+
+        public static Dictionary<int, MultiComponentList> Components { get; set; }
+
+        public static bool UseUOP { get; set; }
+        public static readonly int UOPMultiLength = 0x212A;
+        public static string UOPPath = "MultiCollection.uop";
 
         public enum ImportType
         {
@@ -27,8 +34,9 @@ namespace Ultima
         /// </summary>
         public static void Reload()
         {
-            m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", 0x2000, 14);
-            m_Components = new MultiComponentList[0x2000];
+            m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", UOPMultiLength, 14);
+            //m_FileIndex = new FileIndex("Multi.idx", "Multi.mul", "MultiCollection.uop", 0x212A, 14, ".bin", 0x212A, false);
+            m_Components = new MultiComponentList[UOPMultiLength];
         }
 
         /// <summary>
@@ -41,6 +49,33 @@ namespace Ultima
             MultiComponentList mcl;
 
             index &= 0x1FFF;
+
+            if (!UseUOP)
+            {
+                string uopPath = Files.MulPath[UOPPath.ToLower()];
+
+                if (File.Exists(uopPath))
+                {
+                    UseUOP = true;
+                }
+
+                if (Components == null)
+                {
+                    LoadFromUOP(uopPath);
+                }
+            }
+
+            if (UseUOP)
+            {
+                if (Components.ContainsKey(index))
+                {
+                    return Components[index];
+                }
+                else
+                {
+                    return MultiComponentList.Empty;
+                }
+            }
 
             if (index >= 0 && index < m_Components.Length)
             {
@@ -66,8 +101,10 @@ namespace Ultima
                 if (stream == null)
                     return MultiComponentList.Empty;
 
-                if(Art.IsUOAHS())
+                if (Art.IsUOAHS())
+                {
                     return new MultiComponentList(new BinaryReader(stream), length / 16);
+                }
                 else
                     return new MultiComponentList(new BinaryReader(stream), length / 12);
             }
@@ -128,6 +165,166 @@ namespace Ultima
                 }
             }
             return multilist;
+        }
+
+        /// <summary>
+        /// This was attempted using the other uop methods through FileIndex. It seems the data for MultiCollection.uop
+        /// must be decompressed. None the less, using FileIndex with this uop file was not working.
+        /// </summary>
+        /// <param name="uopPath"></param>
+        public static void LoadFromUOP(string uopPath)
+        {
+            Components = new Dictionary<int, MultiComponentList>();
+
+            var stream = new FileStream(uopPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            BinaryReader streamReader = new BinaryReader(stream);
+
+            // Head Information Start
+            if (streamReader.ReadInt32() != 0x0050594D) // Not a UOP Files
+                throw new ArgumentException(String.Format("This is not a UOP file: {0}!", uopPath));
+
+            int version = streamReader.ReadInt32();
+
+            if (version > 5) // Bad Version
+                throw new ArgumentException(String.Format("Bad Version {1}: {0}", uopPath, version));
+
+            // Multi ID List Array Start
+            var chunkIds = new Dictionary<ulong, int>();
+            string entryName = "build/multicollection/{0:000000}.bin";
+
+            for (int i = 0; i < UOPMultiLength; i++)
+            {
+                ulong hash = FileIndex.HashFileName(String.Format(entryName, i));
+
+                if (!chunkIds.ContainsKey(hash))
+                {
+                    chunkIds.Add(hash, i);
+                }
+            }
+
+            streamReader.ReadUInt32();                      // format timestamp? 0xFD23EC43
+            long startAddress = streamReader.ReadInt64();
+
+            int blockSize = streamReader.ReadInt32();       // files in each block
+            int totalSize = streamReader.ReadInt32();       // Total File Count
+
+            stream.Seek(startAddress, SeekOrigin.Begin);    // Head Information End
+
+            long nextBlock;
+
+            do
+            {
+                int blockFileCount = streamReader.ReadInt32();
+                nextBlock = streamReader.ReadInt64();
+
+                int index = 0;
+
+                do
+                {
+                    long offset = streamReader.ReadInt64();
+
+                    int headerSize = streamReader.ReadInt32();          // header length
+                    int compressedSize = streamReader.ReadInt32();      // compressed size
+                    int decompressedSize = streamReader.ReadInt32();    // decompressed size
+
+                    ulong filehash = streamReader.ReadUInt64();         // filename hash (HashLittle2)
+                    uint datablockhash = streamReader.ReadUInt32();     // data hash (Adler32)
+                    short flag = streamReader.ReadInt16();              // compression method (0 = none, 1 = zlib)
+
+                    index++;
+
+                    if (filehash == 0x126D1E99DDEDEE0A)  // Exclude housing.bin
+                        continue;
+
+                    if (offset == 0 || decompressedSize == 0)
+                        throw new ArgumentException("offset/decrompress size bad!");
+
+                    // Multi ID Search Start
+                    int chunkID = -1;
+
+                    if (chunkIds.TryGetValue(filehash, out chunkID))
+                    {
+                        long positionpoint = stream.Position;  // save current position
+
+                        // Decompress Data Start
+                        stream.Seek(offset + headerSize, SeekOrigin.Begin);
+
+                        byte[] sourceData = new byte[compressedSize];
+
+                        if (stream.Read(sourceData, 0, compressedSize) != compressedSize)
+                            throw new ArgumentException("Bad Compression Size!");
+
+                        byte[] data;
+
+                        if (flag == 1)
+                        {
+                            byte[] destData = new byte[decompressedSize];
+
+                            Zlib.Decompress(destData, ref decompressedSize, sourceData, compressedSize);
+
+                            data = destData;
+                        }
+                        else
+                        {
+                            data = sourceData;
+                        }
+
+                        var tileList = new List<MultiComponentList.MultiTileEntry>();
+
+                        using (MemoryStream fs = new MemoryStream(data))
+                        {
+                            using (BinaryReader reader = new BinaryReader(fs))
+                            {
+                                uint a = reader.ReadUInt32();
+                                uint count = reader.ReadUInt32();
+
+                                for (uint i = 0; i < count; i++)
+                                {
+                                    ushort ItemId = reader.ReadUInt16();
+                                    short x = reader.ReadInt16();
+                                    short y = reader.ReadInt16();
+                                    short z = reader.ReadInt16();
+
+                                    ushort flagint = reader.ReadUInt16();
+
+                                    TileFlag flagg;
+
+                                    switch (flagint)
+                                    {
+                                        default:
+                                        case 0: { flagg = TileFlag.Background; break; }
+                                        case 1: { flagg = TileFlag.None; break; }
+                                        case 257: { flagg = TileFlag.Generic; break; }
+                                    }
+
+                                    uint clilocsCount = reader.ReadUInt32();
+
+                                    if (clilocsCount != 0)
+                                    {
+                                        fs.Seek(fs.Position + (clilocsCount * 4), SeekOrigin.Begin); // binary block bypass
+                                    }
+
+                                    tileList.Add(new MultiComponentList.MultiTileEntry(ItemId, x, y, z, flagg));
+                                }
+
+                                reader.Close();
+                            }
+                        }
+
+                        Components[chunkID] = new MultiComponentList(tileList);
+
+                        stream.Seek(positionpoint, SeekOrigin.Begin); // back to position
+                    }
+                    else
+                    {
+                        //throw new ArgumentException("Bad ChunkID!");
+                    }
+                }
+                while (index < blockFileCount);
+            }
+            while (stream.Seek(nextBlock, SeekOrigin.Begin) != 0);
+
+            chunkIds.Clear();
         }
 
         public static string ReadUOAString(BinaryReader bin)
@@ -200,7 +397,7 @@ namespace Ultima
                                     }
                                     MultiComponentList.MultiTileEntry tempitem = new MultiComponentList.MultiTileEntry();
                                     tempitem.m_ItemID = (ushort)index;
-                                    tempitem.m_Flags = 1;
+                                    tempitem.m_Flags = (TileFlag)1;
                                     tempitem.m_OffsetX = (short)x;
                                     tempitem.m_OffsetY = (short)y;
                                     tempitem.m_OffsetZ = (short)z;
@@ -304,7 +501,7 @@ namespace Ultima
                 using (BinaryWriter binidx = new BinaryWriter(fsidx),
                                     binmul = new BinaryWriter(fsmul))
                 {
-                    for (int index = 0; index < 0x2000; ++index)
+                    for (int index = 0; index < UOPMultiLength; ++index)
                     {
                         MultiComponentList comp = GetComponents(index);
 
@@ -360,13 +557,23 @@ namespace Ultima
         public MultiTileEntry[] SortedTiles { get { return m_SortedTiles; } }
         public int Surface { get { return m_Surface; } }
 
-
         public struct MultiTileEntry
         {
             public ushort m_ItemID;
             public short m_OffsetX, m_OffsetY, m_OffsetZ;
-            public int m_Flags;
-            public int m_Unk1;
+            public TileFlag m_Flags;
+            public uint m_Unk1;
+
+            public MultiTileEntry(ushort itemID, short x, short y, short z, TileFlag flags)
+            {
+                m_ItemID = itemID;
+                m_OffsetX = x;
+                m_OffsetY = y;
+                m_OffsetZ = z;
+                m_Flags = flags;
+
+                m_Unk1 = 0;
+            }
         }
 
         /// <summary>
@@ -476,17 +683,22 @@ namespace Ultima
             bool useNewMultiFormat = Art.IsUOAHS();
             m_Min = m_Max = Point.Empty;
             m_SortedTiles = new MultiTileEntry[count];
+
             for (int i = 0; i < count; ++i)
             {
                 m_SortedTiles[i].m_ItemID = Art.GetLegalItemID(reader.ReadUInt16());
                 m_SortedTiles[i].m_OffsetX = reader.ReadInt16();
                 m_SortedTiles[i].m_OffsetY = reader.ReadInt16();
                 m_SortedTiles[i].m_OffsetZ = reader.ReadInt16();
-                m_SortedTiles[i].m_Flags = reader.ReadInt32();
+
                 if (useNewMultiFormat)
-                    m_SortedTiles[i].m_Unk1 = reader.ReadInt32();
+                {
+                    m_SortedTiles[i].m_Flags = (TileFlag)reader.ReadUInt64();
+                }
                 else
-                    m_SortedTiles[i].m_Unk1 = 0;
+                {
+                    m_SortedTiles[i].m_Flags = (TileFlag)reader.ReadUInt32();
+                }
 
                 MultiTileEntry e = m_SortedTiles[i];
 
@@ -543,7 +755,7 @@ namespace Ultima
                             m_SortedTiles[itemcount].m_OffsetX = Convert.ToInt16(split[1]);
                             m_SortedTiles[itemcount].m_OffsetY = Convert.ToInt16(split[2]);
                             m_SortedTiles[itemcount].m_OffsetZ = Convert.ToInt16(split[3]);
-                            m_SortedTiles[itemcount].m_Flags = Convert.ToInt32(split[4]);
+                            m_SortedTiles[itemcount].m_Flags = (TileFlag)Convert.ToInt32(split[4]);
                             m_SortedTiles[itemcount].m_Unk1 = 0;
 
                             MultiTileEntry e = m_SortedTiles[itemcount];
@@ -622,7 +834,7 @@ namespace Ultima
                             m_SortedTiles[itemcount].m_OffsetX = Convert.ToInt16(split[1]);
                             m_SortedTiles[itemcount].m_OffsetY = Convert.ToInt16(split[2]);
                             m_SortedTiles[itemcount].m_OffsetZ = Convert.ToInt16(split[3]);
-                            m_SortedTiles[itemcount].m_Flags = Convert.ToInt32(split[4]);
+                            m_SortedTiles[itemcount].m_Flags = (TileFlag)Convert.ToInt32(split[4]);
                             m_SortedTiles[itemcount].m_Unk1 = 0;
 
                             MultiTileEntry e = m_SortedTiles[itemcount];
@@ -694,7 +906,7 @@ namespace Ultima
                             m_SortedTiles[itemcount].m_OffsetY = reader.ReadInt16();
                             m_SortedTiles[itemcount].m_OffsetZ = reader.ReadInt16();
                             reader.ReadInt16(); // level
-                            m_SortedTiles[itemcount].m_Flags = 1;
+                            m_SortedTiles[itemcount].m_Flags = (TileFlag)1;
                             reader.ReadInt16(); // hue
                             m_SortedTiles[itemcount].m_Unk1 = 0;
 
@@ -758,7 +970,7 @@ namespace Ultima
                         string line;
                         MultiTileEntry tempitem = new MultiTileEntry();
                         tempitem.m_ItemID = 0xFFFF;
-                        tempitem.m_Flags = 1;
+                        tempitem.m_Flags = (TileFlag)1;
                         tempitem.m_Unk1 = 0;
                         while ((line = ip.ReadLine()) != null)
                         {
@@ -883,6 +1095,7 @@ namespace Ultima
                 if (m_SortedTiles[i].m_OffsetY > m_Max.Y)
                     m_Max.Y = m_SortedTiles[i].m_OffsetY;
             }
+
             ConvertList();
         }
 
@@ -899,7 +1112,7 @@ namespace Ultima
             {
                 string[] split = Regex.Split(line, @"\s+");
                 m_SortedTiles[itemcount].m_ItemID = Convert.ToUInt16(split[0]);
-                m_SortedTiles[itemcount].m_Flags = Convert.ToInt32(split[1]);
+                m_SortedTiles[itemcount].m_Flags = (TileFlag)Convert.ToInt32(split[1]);
                 m_SortedTiles[itemcount].m_OffsetX = Convert.ToInt16(split[2]);
                 m_SortedTiles[itemcount].m_OffsetY = Convert.ToInt16(split[3]);
                 m_SortedTiles[itemcount].m_OffsetZ = Convert.ToInt16(split[4]);
@@ -968,7 +1181,7 @@ namespace Ultima
                 int xOffset = m_SortedTiles[i].m_OffsetX + m_Center.X;
                 int yOffset = m_SortedTiles[i].m_OffsetY + m_Center.Y;
 
-                tiles[xOffset][yOffset].Add((ushort)(m_SortedTiles[i].m_ItemID), (sbyte)m_SortedTiles[i].m_OffsetZ, (sbyte)m_SortedTiles[i].m_Flags, m_SortedTiles[i].m_Unk1);
+                tiles[xOffset][yOffset].Add((ushort)(m_SortedTiles[i].m_ItemID), (sbyte)m_SortedTiles[i].m_OffsetZ, m_SortedTiles[i].m_Flags, m_SortedTiles[i].m_Unk1);
             }
 
             m_Surface = 0;
@@ -1011,7 +1224,7 @@ namespace Ultima
                         m_SortedTiles[counter].m_OffsetX = (short)(x - m_Center.X);
                         m_SortedTiles[counter].m_OffsetY = (short)(y - m_Center.Y);
                         m_SortedTiles[counter].m_OffsetZ = (short)(tiles[i].Z);
-                        m_SortedTiles[counter].m_Flags = (int)tiles[i].Flag;
+                        m_SortedTiles[counter].m_Flags = (TileFlag)tiles[i].Flag;
                         m_SortedTiles[counter].m_Unk1 = 0;
 
                         if (m_SortedTiles[counter].m_OffsetX < m_Min.X)

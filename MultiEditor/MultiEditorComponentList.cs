@@ -70,7 +70,7 @@ namespace MultiEditor
                 {
                     for (int i = 0; i < list.Tiles[x][y].Length; ++i)
                     {
-                        Tiles.Add(new MultiTile(list.Tiles[x][y][i].ID, x, y, list.Tiles[x][y][i].Z, list.Tiles[x][y][i].Flag));
+                        Tiles.Add(new MultiTile(list.Tiles[x][y][i].ID, x, y, list.Tiles[x][y][i].Z, (int)list.Tiles[x][y][i].Flag));
                     }
                     Tiles.Add(new FloorTile(x, y, Parent.DrawFloorZ));
                 }
@@ -147,7 +147,7 @@ namespace MultiEditor
                 MultiTile tile = Tiles[i];
                 if (tile.isVirtualFloor)
                     continue;
-                tiles[tile.X][tile.Y].Add((ushort)(tile.ID), (sbyte)tile.Z, tile.Invisible ? (sbyte)0 : (sbyte)1, 0);
+                tiles[tile.X][tile.Y].Add((ushort)(tile.ID), (sbyte)tile.Z, tile.Invisible ? (TileFlag)0 : (TileFlag)1);
                 ++count;
             }
             return new MultiComponentList(tiles, count, Width, Height);

@@ -64,9 +64,11 @@ namespace FiddlerControls
             TreeViewMulti.BeginUpdate();
             TreeViewMulti.Nodes.Clear();
             List<TreeNode> cache = new List<TreeNode>();
-            for (int i = 0; i < 0x2000; ++i)
+
+            for (int i = 0; i < Ultima.Multis.UOPMultiLength; ++i)
             {
                 MultiComponentList multi = Ultima.Multis.GetComponents(i);
+
                 if (multi != MultiComponentList.Empty)
                 {
                     TreeNode node = null;
@@ -330,7 +332,7 @@ namespace FiddlerControls
 
             if (ShowFreeSlots)
             {
-                for (int i = 0; i < 0x2000; ++i)
+                for (int i = 0; i < Ultima.Multis.UOPMultiLength; ++i)
                 {
                     MultiComponentList multi = Ultima.Multis.GetComponents(i);
                     TreeNode node = null;
@@ -357,7 +359,7 @@ namespace FiddlerControls
             }
             else
             {
-                for (int i = 0; i < 0x2000; ++i)
+                for (int i = 0; i < Ultima.Multis.UOPMultiLength; ++i)
                 {
                     MultiComponentList multi = Ultima.Multis.GetComponents(i);
                     if (multi != MultiComponentList.Empty)

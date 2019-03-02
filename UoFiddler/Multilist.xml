@@ -31,6 +31,54 @@
   <Multi name="Large Dragon Boat [east]" id="21" type="0" />
   <Multi name="Large Dragon Boat [south]" id="22" type="0" />
   <Multi name="Large Dragon Boat [west]" id="23" type="0" />
+  <Multi name="Orcish Galleon [North]" id="24" type="0" />
+  <Multi name="Orcish Galleon [East]" id="25" type="0" />
+  <Multi name="Orcish Galleon [South]" id="26" type="0" />
+  <Multi name="Orcish Galleon [West]" id="27" type="0" />
+  <Multi name="Orcish Galleon Damaged [North]" id="28" type="0" />
+  <Multi name="Orcish Galleon Damaged [East]" id="29" type="0" />
+  <Multi name="Orcish Galleon Damaged [South]" id="30" type="0" />
+  <Multi name="Orcish Galleon Damaged [West]" id="31" type="0" />
+  <Multi name="Orcish Galleon Heavily Damaged [North]" id="32" type="0" />
+  <Multi name="Orcish Galleon Heavily Damaged [East]" id="33" type="0" />
+  <Multi name="Orcish Galleon Heavily Damaged [South]" id="34" type="0" />
+  <Multi name="Orcish Galleon Heavily Damaged [West]" id="35" type="0" />
+  <Multi name="Gargish Galleon [North]" id="36" type="0" />
+  <Multi name="Gargish Galleon [East]" id="37" type="0" />
+  <Multi name="Gargish Galleon [South]" id="38" type="0" />
+  <Multi name="Gargish Galleon [West]" id="39" type="0" />
+  <Multi name="Gargish Galleon Damaged [North]" id="40" type="0" />
+  <Multi name="Gargish Galleon Damaged [East]" id="41" type="0" />
+  <Multi name="Gargish Galleon Damaged [South]" id="42" type="0" />
+  <Multi name="Gargish Galleon Damaged [West]" id="43" type="0" />
+  <Multi name="Gargish Galleon Heavily Damaged [North]" id="44" type="0" />
+  <Multi name="Gargish Galleon Heavily Damaged [East]" id="45" type="0" />
+  <Multi name="Gargish Galleon Heavily Damaged [South]" id="46" type="0" />
+  <Multi name="Gargish Galleon Heavily Damaged [West]" id="47" type="0" />
+  <Multi name="Tokuno Galleon [North]" id="48" type="0" />
+  <Multi name="Tokuno Galleon [East]" id="49" type="0" />
+  <Multi name="Tokuno Galleon [South]" id="50" type="0" />
+  <Multi name="Tokuno Galleon [West]" id="51" type="0" />
+  <Multi name="Tokuno Galleon Damaged [North]" id="52" type="0" />
+  <Multi name="Tokuno Galleon Damaged [East]" id="53" type="0" />
+  <Multi name="Tokuno Galleon Damaged [South]" id="54" type="0" />
+  <Multi name="Tokuno Galleon Damaged [West]" id="55" type="0" />
+  <Multi name="Tokuno Galleon Heavily Damaged [North]" id="56" type="0" />
+  <Multi name="Tokuno Galleon Heavily Damaged [East]" id="57" type="0" />
+  <Multi name="Tokuno Galleon Heavily Damaged [South]" id="58" type="0" />
+  <Multi name="Tokuno Galleon Heavily Damaged [West]" id="59" type="0" />
+  <Multi name="Rowboat [North]" id="60" type="0" />
+  <Multi name="Rowboat Galleon [East]" id="61" type="0" />
+  <Multi name="Rowboat Galleon [South]" id="62" type="0" />
+  <Multi name="Rowboat Galleon [West]" id="63" type="0" />
+  <Multi name="Britannian Ship [North]" id="64" type="0" />
+  <Multi name="Britannian Galleon [East]" id="65" type="0" />
+  <Multi name="Britannian Galleon [South]" id="66" type="0" />
+  <Multi name="Britannian Galleon [West]" id="67" type="0" />
+  <Multi name="Britannian Galleon Damaged [North]" id="68" type="0" />
+  <Multi name="Britannian Galleon Damaged [East]" id="69" type="0" />
+  <Multi name="Britannian Galleon Damaged [South]" id="70" type="0" />
+  <Multi name="Britannian Galleon Damaged [West]" id="71" type="0" />
   <Multi name="Small Stone and Plaster House" id="100" type="1" />
   <Multi name="Small Stone and Plaster House" id="101" type="1" />
   <Multi name="Small Fieldstone House" id="102" type="1" />
@@ -201,6 +249,38 @@
   <Multi name="Foundation [18x16]" id="5241" type="3" />
   <Multi name="Foundation [18x17]" id="5242" type="3" />
   <Multi name="Foundation [18x18]" id="5243" type="3" />
+  <Multi name="Foundation [24x24]" id="5244" type="3" />
+  <Multi name="Foundation [31x31]" id="5245" type="3" />
+  <Multi name="Trinsic Keep" id="5246" type="3" />
+  <Multi name="Gothic Rose Castle" id="5247" type="3" />
+  <Multi name="Elsa Castle" id="5248" type="3" />
+  <Multi name="Spires" id="5249" type="3" />
+  <Multi name="Castle of Oceiana" id="5250" type="3" />
+  <Multi name="Feudal Castle" id="5251" type="3" />
+  <Multi name="Robin's Nest" id="5252" type="3" />
+  <Multi name="Traditional Keep" id="5253" type="3" />
+  <Multi name="Villa Crowley" id="5254" type="3" />
+  <Multi name="Darkthorn Keep" id="5255" type="3" />
+  <Multi name="Sandalwood Keep" id="5256" type="3" />
+  <Multi name="Casa Moga" id="5257" type="3" />
+  <Multi name="Unidentified 1" id="5258" type="3" />
+  <Multi name="Unidentified 2" id="5259" type="3" />
+  <Multi name="Unidentified 3" id="5260" type="3" />
+  <Multi name="Unidentified 4" id="5261" type="3" />
+  <Multi name="Unidentified 5" id="5262" type="3" />
+  <Multi name="Unidentified 6" id="5263" type="3" />
+  <Multi name="Bazaar Stall" id="6000" type="2" />
+  <Multi name="Bazaar Stall" id="6001" type="2" />
+  <Multi name="Bazaar Stall" id="6002" type="2" />
+  <Multi name="Bazaar Stall" id="6003" type="2" />
+  <Multi name="Bazaar Stall" id="6004" type="2" />
+  <Multi name="Bazaar Stall" id="6005" type="2" />
+  <Multi name="Bazaar Stall" id="6006" type="2" />
+  <Multi name="Bazaar Stall" id="6007" type="2" />
+  <Multi name="Bazaar Stall" id="6008" type="2" />
+  <Multi name="Bazaar Stall" id="6011" type="2" />
+  <Multi name="Bazaar Stall" id="6012" type="2" />
+  
   <Multi name="New Player Quest Cam" id="7500" type="2" />
 </Multis>
 
