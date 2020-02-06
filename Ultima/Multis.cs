@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Ultima
 {
@@ -1089,6 +1090,60 @@ namespace Ultima
                                 m_SortedTiles[i].m_Flags));
                 }
             }
+        }
+
+        public void ExportToCentredPlus(string TileEntryFile, string TileGroupFile, string multiName, string multiId,string multiGroup)
+        {
+             XmlDocument tileEntryXml = new XmlDocument();
+             XmlDocument tileGroupXml = new XmlDocument();
+             tileEntryXml.Load(TileEntryFile);
+             tileGroupXml.Load(TileGroupFile);
+            //Add the MultiID Entry in tileGroup XML in the selected group.
+             XmlNode groupNode = null;
+             XmlElement newGroupEntry = tileGroupXml.CreateElement("Entry");
+             groupNode = tileGroupXml.SelectSingleNode("/TilesGroup/Group[@Name='Entries']/*/Group[@Name='"+multiGroup+"']");
+             if (groupNode != null)
+             {
+
+                newGroupEntry.SetAttribute("Id", multiId);
+                groupNode.AppendChild(newGroupEntry);
+                tileGroupXml.Save(TileGroupFile);
+
+                XmlNode entryNode = tileEntryXml["TilesEntry"];
+                XmlElement newTileEntry = tileEntryXml.CreateElement("Entry");
+                newTileEntry.SetAttribute("Id", multiId);
+                newTileEntry.SetAttribute("Name", multiName);
+                foreach (MultiTileEntry m in m_SortedTiles)
+                {
+                    XmlElement multiElement = tileEntryXml.CreateElement("Item");
+                    
+                    multiElement.SetAttribute("X", m.m_OffsetX.ToString());
+                    multiElement.SetAttribute("Y", m.m_OffsetY.ToString());
+                    multiElement.SetAttribute("Z", m.m_OffsetZ.ToString());
+                    multiElement.SetAttribute("ID", m.m_ItemID.ToString());
+                    multiElement.SetAttribute("Hue", m.m_Unk1.ToString());
+                    newTileEntry.AppendChild(multiElement);
+                }
+                entryNode.AppendChild(newTileEntry);
+                MessageBox.Show("Exported!!");
+                tileEntryXml.Save(TileEntryFile);
+            }
+
+            /* xmlWriter.(String.Format("{0} {1} {2} {3} {4}",
+                                m_SortedTiles[i].m_ItemID,
+                                m_SortedTiles[i].m_OffsetX,
+                                m_SortedTiles[i].m_OffsetY,
+                                m_SortedTiles[i].m_OffsetZ,
+                                m_SortedTiles[i].m_Flags));*/
+            /*  using (XmlTextWriter xmlWriter = new XmlTextWriter(TileEntryFile, System.Text.Encoding.GetEncoding(1252)))
+              {
+                  for (int i = 0; i < m_SortedTiles.Length; ++i)
+                  {
+
+
+                  }
+              }
+              */
         }
     }
 }

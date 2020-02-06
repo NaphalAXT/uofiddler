@@ -45,7 +45,9 @@ namespace MultiEditor
         private int pictureboxDrawTilesrow;
         private static MultiEditor refMarkerMulti = null;
         private bool ForceRefresh;
-
+        private string fileTileEntry;
+        private string fileTileGroup;
+        private string lastTileEntryId;
         #endregion Fields
 
         #region Constructors (1)
@@ -1362,6 +1364,85 @@ namespace MultiEditor
             e.Cancel = true;
         }
 
+        private void TileEntryImport_Click(object sender, EventArgs e)
+        {
+            if (compList != null)
+            {
+                if (openFileDialogTileEntry.ShowDialog() == DialogResult.OK)
+                {
+                    fileTileEntry = openFileDialogTileEntry.FileName;
+                    XmlDocument doc =  new XmlDocument();
+                    XmlNodeList nodes = null;
+                    doc.Load(fileTileEntry);
+                    nodes = doc.SelectNodes("/TilesEntry/Entry");
+                    List<int> l = new List<int>();
+                    
+                    foreach (XmlNode n in nodes)
+                    {
+                        int x = 0;
+                       
+                        Int32.TryParse(n.Attributes["Id"].Value.ToString(), out x);
+                        l.Add(x);
+                        
+                    }
+                    l.Sort();
+                    
+                    labelTileEntry.Text = "Last TileEntry Id: " + l[l.Count-1].ToString();
+                    lastTileEntryId = (l[l.Count - 1] + 1).ToString();
+                }
+            }
+            else
+            {
+                MessageBox.Show("A multi must be present", "Error");
+            }
+        }
 
+        private void TileGroupImport_Click(object sender, EventArgs e)
+        {
+            if (compList != null)
+            {
+                if (openFileDialogTileGroup.ShowDialog() == DialogResult.OK)
+                {
+                    fileTileGroup = openFileDialogTileGroup.FileName;
+                    XmlDocument doc = new XmlDocument();
+                    XmlNode node = null;
+                    doc.Load(fileTileGroup);
+                    node = doc.SelectSingleNode("/TilesGroup/Group[@Name='Entries']"); 
+                    foreach (XmlNode n  in node)
+                    {
+                        string groupName = n.Attributes["Name"].Value;
+                        TreeNode t = TileGroupTreeView.Nodes.Add(groupName);
+                        
+                       
+                        foreach (XmlNode m in n)
+                        {
+                            if (m.Attributes["Name"] != null)
+                            {
+                                string subGroupName = m.Attributes["Name"].Value;
+                               t.Nodes.Add(subGroupName);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("A multi must be present", "Error");
+            }
+        }
+
+        private void btnSaveToCentred_Click(object sender, EventArgs e)
+        {
+         
+            if (compList != null)
+            { 
+                MultiComponentList sdklist = compList.ConvertToSDK();
+                string multiName, multiId, multiGroup;
+                multiName = TileEntryName.Text;
+                multiId = lastTileEntryId;
+                multiGroup = TileGroupTreeView.SelectedNode.Text;
+                sdklist.ExportToCentredPlus(fileTileEntry, fileTileGroup, multiName, multiId, multiGroup);
+            }
+        }
     }
 }
