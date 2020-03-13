@@ -57,6 +57,13 @@ namespace MultiEditor
             this.numericUpDown_Size_Height = new System.Windows.Forms.NumericUpDown();
             this.importTab = new System.Windows.Forms.TabPage();
             this.treeViewMultiList = new System.Windows.Forms.TreeView();
+            this.expCentred = new System.Windows.Forms.TabPage();
+            this.labelTileEntry = new System.Windows.Forms.Label();
+            this.TileGroupTreeView = new System.Windows.Forms.TreeView();
+            this.TileEntryName = new System.Windows.Forms.TextBox();
+            this.btnSaveToCentred = new System.Windows.Forms.Button();
+            this.TileGroupImport = new System.Windows.Forms.Button();
+            this.TileEntryImport = new System.Windows.Forms.Button();
             this.Save = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.BTN_Export_WSC = new System.Windows.Forms.Button();
@@ -78,7 +85,6 @@ namespace MultiEditor
             this.BTN_Select = new System.Windows.Forms.CheckBox();
             this.numericUpDown_Floor = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_Z = new System.Windows.Forms.NumericUpDown();
-            this.collapsibleSplitter1 = new FiddlerControls.CollapsibleSplitter();
             this.Selectedpanel = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DynamiccheckBox = new System.Windows.Forms.CheckBox();
@@ -114,8 +120,11 @@ namespace MultiEditor
             this.toolStripLabelCoord = new System.Windows.Forms.ToolStripLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.FloatingPreviewPanel = new System.Windows.Forms.Panel();
+            this.openFileDialogTileEntry = new System.Windows.Forms.OpenFileDialog();
+            this.openFileDialogTileGroup = new System.Windows.Forms.OpenFileDialog();
             this.TC_MultiEditorToolbox.SuspendLayout();
             this.tileTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
             this.splitContainer4.Panel1.SuspendLayout();
             this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
@@ -125,12 +134,15 @@ namespace MultiEditor
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Size_Width)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Size_Height)).BeginInit();
             this.importTab.SuspendLayout();
+            this.expCentred.SuspendLayout();
             this.Save.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
@@ -141,6 +153,7 @@ namespace MultiEditor
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Selected_Z)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Selected_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Selected_X)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
@@ -154,12 +167,13 @@ namespace MultiEditor
             this.TC_MultiEditorToolbox.Controls.Add(this.tileTab);
             this.TC_MultiEditorToolbox.Controls.Add(this.designTab);
             this.TC_MultiEditorToolbox.Controls.Add(this.importTab);
+            this.TC_MultiEditorToolbox.Controls.Add(this.expCentred);
             this.TC_MultiEditorToolbox.Controls.Add(this.Save);
             this.TC_MultiEditorToolbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TC_MultiEditorToolbox.Location = new System.Drawing.Point(0, 91);
+            this.TC_MultiEditorToolbox.Location = new System.Drawing.Point(0, 83);
             this.TC_MultiEditorToolbox.Name = "TC_MultiEditorToolbox";
             this.TC_MultiEditorToolbox.SelectedIndex = 0;
-            this.TC_MultiEditorToolbox.Size = new System.Drawing.Size(200, 181);
+            this.TC_MultiEditorToolbox.Size = new System.Drawing.Size(200, 189);
             this.TC_MultiEditorToolbox.TabIndex = 0;
             // 
             // tileTab
@@ -169,7 +183,7 @@ namespace MultiEditor
             this.tileTab.Location = new System.Drawing.Point(4, 22);
             this.tileTab.Name = "tileTab";
             this.tileTab.Padding = new System.Windows.Forms.Padding(3);
-            this.tileTab.Size = new System.Drawing.Size(192, 155);
+            this.tileTab.Size = new System.Drawing.Size(192, 163);
             this.tileTab.TabIndex = 0;
             this.tileTab.Text = "Tiles";
             this.tileTab.UseVisualStyleBackColor = true;
@@ -189,8 +203,8 @@ namespace MultiEditor
             // 
             this.splitContainer4.Panel2.Controls.Add(this.pictureBoxDrawTiles);
             this.splitContainer4.Panel2.Controls.Add(this.vScrollBarDrawTiles);
-            this.splitContainer4.Size = new System.Drawing.Size(186, 149);
-            this.splitContainer4.SplitterDistance = 71;
+            this.splitContainer4.Size = new System.Drawing.Size(186, 157);
+            this.splitContainer4.SplitterDistance = 74;
             this.splitContainer4.TabIndex = 0;
             // 
             // treeViewTilesXML
@@ -203,14 +217,14 @@ namespace MultiEditor
             this.treeViewTilesXML.Location = new System.Drawing.Point(0, 0);
             this.treeViewTilesXML.Name = "treeViewTilesXML";
             this.treeViewTilesXML.SelectedImageIndex = 0;
-            this.treeViewTilesXML.Size = new System.Drawing.Size(186, 71);
+            this.treeViewTilesXML.Size = new System.Drawing.Size(186, 74);
             this.treeViewTilesXML.TabIndex = 0;
             this.treeViewTilesXML.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewTilesXML_OnAfterSelect);
             // 
             // DummyContextMenu
             // 
             this.DummyContextMenu.Name = "DummyContextMenu";
-            this.DummyContextMenu.Size = new System.Drawing.Size(153, 26);
+            this.DummyContextMenu.Size = new System.Drawing.Size(61, 4);
             this.DummyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.OnDummyContextMenuOpening);
             // 
             // imageListTreeView
@@ -225,7 +239,7 @@ namespace MultiEditor
             this.pictureBoxDrawTiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxDrawTiles.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxDrawTiles.Name = "pictureBoxDrawTiles";
-            this.pictureBoxDrawTiles.Size = new System.Drawing.Size(169, 74);
+            this.pictureBoxDrawTiles.Size = new System.Drawing.Size(169, 79);
             this.pictureBoxDrawTiles.TabIndex = 3;
             this.pictureBoxDrawTiles.TabStop = false;
             this.pictureBoxDrawTiles.SizeChanged += new System.EventHandler(this.pictureBoxDrawTiles_OnResize);
@@ -239,7 +253,7 @@ namespace MultiEditor
             this.vScrollBarDrawTiles.Dock = System.Windows.Forms.DockStyle.Right;
             this.vScrollBarDrawTiles.Location = new System.Drawing.Point(169, 0);
             this.vScrollBarDrawTiles.Name = "vScrollBarDrawTiles";
-            this.vScrollBarDrawTiles.Size = new System.Drawing.Size(17, 74);
+            this.vScrollBarDrawTiles.Size = new System.Drawing.Size(17, 79);
             this.vScrollBarDrawTiles.TabIndex = 0;
             this.vScrollBarDrawTiles.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBarDrawTiles_Scroll);
             // 
@@ -250,7 +264,7 @@ namespace MultiEditor
             this.designTab.Location = new System.Drawing.Point(4, 22);
             this.designTab.Name = "designTab";
             this.designTab.Padding = new System.Windows.Forms.Padding(3);
-            this.designTab.Size = new System.Drawing.Size(192, 160);
+            this.designTab.Size = new System.Drawing.Size(192, 163);
             this.designTab.TabIndex = 1;
             this.designTab.Text = "Design";
             this.designTab.UseVisualStyleBackColor = true;
@@ -321,7 +335,7 @@ namespace MultiEditor
             this.importTab.Controls.Add(this.treeViewMultiList);
             this.importTab.Location = new System.Drawing.Point(4, 22);
             this.importTab.Name = "importTab";
-            this.importTab.Size = new System.Drawing.Size(192, 160);
+            this.importTab.Size = new System.Drawing.Size(192, 163);
             this.importTab.TabIndex = 2;
             this.importTab.Text = "Import";
             this.importTab.UseVisualStyleBackColor = true;
@@ -334,10 +348,79 @@ namespace MultiEditor
             this.treeViewMultiList.HotTracking = true;
             this.treeViewMultiList.Location = new System.Drawing.Point(0, 0);
             this.treeViewMultiList.Name = "treeViewMultiList";
-            this.treeViewMultiList.Size = new System.Drawing.Size(192, 155);
+            this.treeViewMultiList.Size = new System.Drawing.Size(192, 163);
             this.treeViewMultiList.TabIndex = 0;
             this.treeViewMultiList.NodeMouseHover += new System.Windows.Forms.TreeNodeMouseHoverEventHandler(this.treeViewMultiList_NodeMouseHover);
             this.treeViewMultiList.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewMultiList_NodeMouseDoubleClick);
+            // 
+            // expCentred
+            // 
+            this.expCentred.Controls.Add(this.labelTileEntry);
+            this.expCentred.Controls.Add(this.TileGroupTreeView);
+            this.expCentred.Controls.Add(this.TileEntryName);
+            this.expCentred.Controls.Add(this.btnSaveToCentred);
+            this.expCentred.Controls.Add(this.TileGroupImport);
+            this.expCentred.Controls.Add(this.TileEntryImport);
+            this.expCentred.Location = new System.Drawing.Point(4, 22);
+            this.expCentred.Name = "expCentred";
+            this.expCentred.Padding = new System.Windows.Forms.Padding(3);
+            this.expCentred.Size = new System.Drawing.Size(192, 163);
+            this.expCentred.TabIndex = 4;
+            this.expCentred.Text = "ExportToCentred+";
+            this.expCentred.UseVisualStyleBackColor = true;
+            // 
+            // labelTileEntry
+            // 
+            this.labelTileEntry.AutoSize = true;
+            this.labelTileEntry.Location = new System.Drawing.Point(3, 21);
+            this.labelTileEntry.Name = "labelTileEntry";
+            this.labelTileEntry.Size = new System.Drawing.Size(86, 13);
+            this.labelTileEntry.TabIndex = 6;
+            this.labelTileEntry.Text = "Last TileEntry Id:";
+            // 
+            // TileGroupTreeView
+            // 
+            this.TileGroupTreeView.Location = new System.Drawing.Point(6, 73);
+            this.TileGroupTreeView.Name = "TileGroupTreeView";
+            this.TileGroupTreeView.Size = new System.Drawing.Size(99, 84);
+            this.TileGroupTreeView.TabIndex = 5;
+            // 
+            // TileEntryName
+            // 
+            this.TileEntryName.Location = new System.Drawing.Point(6, 37);
+            this.TileEntryName.Name = "TileEntryName";
+            this.TileEntryName.Size = new System.Drawing.Size(99, 20);
+            this.TileEntryName.TabIndex = 4;
+            // 
+            // btnSaveToCentred
+            // 
+            this.btnSaveToCentred.Location = new System.Drawing.Point(111, 134);
+            this.btnSaveToCentred.Name = "btnSaveToCentred";
+            this.btnSaveToCentred.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveToCentred.TabIndex = 2;
+            this.btnSaveToCentred.Text = "Export";
+            this.btnSaveToCentred.UseVisualStyleBackColor = true;
+            this.btnSaveToCentred.Click += new System.EventHandler(this.btnSaveToCentred_Click);
+            // 
+            // TileGroupImport
+            // 
+            this.TileGroupImport.Location = new System.Drawing.Point(109, 73);
+            this.TileGroupImport.Name = "TileGroupImport";
+            this.TileGroupImport.Size = new System.Drawing.Size(75, 23);
+            this.TileGroupImport.TabIndex = 1;
+            this.TileGroupImport.Text = "TileGroup";
+            this.TileGroupImport.UseVisualStyleBackColor = true;
+            this.TileGroupImport.Click += new System.EventHandler(this.TileGroupImport_Click);
+            // 
+            // TileEntryImport
+            // 
+            this.TileEntryImport.Location = new System.Drawing.Point(111, 37);
+            this.TileEntryImport.Name = "TileEntryImport";
+            this.TileEntryImport.Size = new System.Drawing.Size(75, 23);
+            this.TileEntryImport.TabIndex = 0;
+            this.TileEntryImport.Text = "TileEntry";
+            this.TileEntryImport.UseVisualStyleBackColor = true;
+            this.TileEntryImport.Click += new System.EventHandler(this.TileEntryImport_Click);
             // 
             // Save
             // 
@@ -346,7 +429,7 @@ namespace MultiEditor
             this.Save.Location = new System.Drawing.Point(4, 22);
             this.Save.Name = "Save";
             this.Save.Padding = new System.Windows.Forms.Padding(3);
-            this.Save.Size = new System.Drawing.Size(192, 160);
+            this.Save.Size = new System.Drawing.Size(192, 163);
             this.Save.TabIndex = 3;
             this.Save.Text = "Save";
             this.Save.UseVisualStyleBackColor = true;
@@ -475,7 +558,6 @@ namespace MultiEditor
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.TC_MultiEditorToolbox);
-            this.splitContainer3.Panel2.Controls.Add(this.collapsibleSplitter1);
             this.splitContainer3.Panel2.Controls.Add(this.Selectedpanel);
             this.splitContainer3.Size = new System.Drawing.Size(200, 324);
             this.splitContainer3.SplitterWidth = 2;
@@ -641,22 +723,6 @@ namespace MultiEditor
             this.numericUpDown_Z.Name = "numericUpDown_Z";
             this.numericUpDown_Z.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown_Z.TabIndex = 5;
-            // 
-            // collapsibleSplitter1
-            // 
-            this.collapsibleSplitter1.AnimationDelay = 20;
-            this.collapsibleSplitter1.AnimationStep = 20;
-            this.collapsibleSplitter1.BorderStyle3D = System.Windows.Forms.Border3DStyle.Flat;
-            this.collapsibleSplitter1.ControlToHide = this.Selectedpanel;
-            this.collapsibleSplitter1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.collapsibleSplitter1.ExpandParentForm = false;
-            this.collapsibleSplitter1.Location = new System.Drawing.Point(0, 83);
-            this.collapsibleSplitter1.Name = "collapsibleSplitter1";
-            this.collapsibleSplitter1.TabIndex = 5;
-            this.collapsibleSplitter1.TabStop = false;
-            this.toolTip1.SetToolTip(this.collapsibleSplitter1, "Selected Tile Panel");
-            this.collapsibleSplitter1.UseAnimations = true;
-            this.collapsibleSplitter1.VisualStyle = FiddlerControls.VisualStyles.DoubleDots;
             // 
             // Selectedpanel
             // 
@@ -993,6 +1059,16 @@ namespace MultiEditor
             this.FloatingPreviewPanel.Size = new System.Drawing.Size(200, 100);
             this.FloatingPreviewPanel.TabIndex = 4;
             // 
+            // openFileDialogTileEntry
+            // 
+            this.openFileDialogTileEntry.FileName = "TileEntry";
+            this.openFileDialogTileEntry.Filter = "XML File(.xml)|*.xml";
+            // 
+            // openFileDialogTileGroup
+            // 
+            this.openFileDialogTileGroup.FileName = "TileGroup";
+            this.openFileDialogTileGroup.Filter = "XML File(.xml)|*.xml";
+            // 
             // MultiEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1006,6 +1082,7 @@ namespace MultiEditor
             this.tileTab.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
             this.splitContainer4.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDrawTiles)).EndInit();
             this.designTab.ResumeLayout(false);
@@ -1014,6 +1091,8 @@ namespace MultiEditor
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Size_Width)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Size_Height)).EndInit();
             this.importTab.ResumeLayout(false);
+            this.expCentred.ResumeLayout(false);
+            this.expCentred.PerformLayout();
             this.Save.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -1022,9 +1101,11 @@ namespace MultiEditor
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer3.Panel1.ResumeLayout(false);
             this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Floor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Z)).EndInit();
@@ -1037,6 +1118,7 @@ namespace MultiEditor
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.MaxHeightTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMulti)).EndInit();
@@ -1083,7 +1165,6 @@ namespace MultiEditor
         private System.Windows.Forms.NumericUpDown numericUpDown_Selected_Z;
         private System.Windows.Forms.NumericUpDown numericUpDown_Selected_Y;
         private System.Windows.Forms.NumericUpDown numericUpDown_Selected_X;
-        private FiddlerControls.CollapsibleSplitter collapsibleSplitter1;
         private System.Windows.Forms.Panel Selectedpanel;
         private System.Windows.Forms.ImageList imageListTools;
         private System.Windows.Forms.PictureBox pictureBoxDrawTiles;
@@ -1121,5 +1202,14 @@ namespace MultiEditor
         private System.Windows.Forms.ToolStripMenuItem removeAllTransToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showDoubleSurfaceMenuItem;
         private System.Windows.Forms.ContextMenuStrip DummyContextMenu;
+        private System.Windows.Forms.TabPage expCentred;
+        private System.Windows.Forms.Button btnSaveToCentred;
+        private System.Windows.Forms.Button TileGroupImport;
+        private System.Windows.Forms.Button TileEntryImport;
+        private System.Windows.Forms.OpenFileDialog openFileDialogTileEntry;
+        private System.Windows.Forms.OpenFileDialog openFileDialogTileGroup;
+        private System.Windows.Forms.TextBox TileEntryName;
+        private System.Windows.Forms.TreeView TileGroupTreeView;
+        private System.Windows.Forms.Label labelTileEntry;
     }
 }
