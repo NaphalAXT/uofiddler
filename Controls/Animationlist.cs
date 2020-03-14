@@ -460,6 +460,11 @@ namespace FiddlerControls
                 node.ToolTipText = Animations.GetFileName(value);
                 rootnode.Nodes.Add(node);
 
+                if(value==666 || value==667)
+                {
+                    System.Console.WriteLine("Teste");
+                }
+
                 for (int i = 0; i < AnimNames[type].GetLength(0); ++i)
                 {
                     if (Animations.IsActionDefined(value, i, 0))
